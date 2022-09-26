@@ -19,6 +19,7 @@ from recipe.serializers import (
 
 RECIPES_URL = reverse('recipe:recipe-list')
 
+
 def detail_url(recipe_id):
     """Create and return a recipe detail URL"""
     return reverse('recipe:recipe-detail', args=[recipe_id])
@@ -38,6 +39,7 @@ def create_recipe(user, **params):
 
     recipe = Recipe.objects.create(user=user, **defaults)
     return recipe
+
 
 def create_user(**params):
     """Create and return a new user"""
@@ -61,7 +63,10 @@ class PrivateRecipeAPITests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = create_user(email='user@example.com', password='testpass123')
+        self.user = create_user(
+            email='user@example.com',
+            password='testpass123'
+            )
         self.client.force_authenticate(self.user)
 
     def test_retrieve_recipes(self):
@@ -149,7 +154,7 @@ class PrivateRecipeAPITests(TestCase):
         payload = {
             'title': 'New recipe title',
             'link': 'https://example.com/new-recipe.pdf',
-            'description':'New recipe description',
+            'description': 'New recipe description',
             'time_minutes': 10,
             'price': Decimal('2.50'),
         }
@@ -184,7 +189,7 @@ class PrivateRecipeAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(Recipe.objects.filter(id=recipe.id).exists())
 
-    def test_recipe_delete_other_users_recipe_error(self):
+    def test_delete_other_users_recipe_error(self):
         """Test trying to delete another users recipe gives error"""
         new_user = create_user(email='user2@example.com', password='test123')
         recipe = create_recipe(user=new_user)
