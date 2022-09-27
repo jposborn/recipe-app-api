@@ -267,7 +267,7 @@ class PrivateRecipeAPITests(TestCase):
         recipe.tags.add(tag_breakfast)
 
         tag_lunch = Tag.objects.create(user=self.user, name='Lunch')
-        payload = {'tag': [{'name': 'Lunch'}]}
+        payload = {'tags': [{'name': 'Lunch'}]}
         url = detail_url(recipe.id)
         res = self.client.patch(url, payload, format='json')
 
@@ -278,7 +278,6 @@ class PrivateRecipeAPITests(TestCase):
     def test_clear_recipe_tags(self):
         """Test clearing a recipes tags"""
         tag = Tag.objects.create(user=self.user, name='Dessert')
-        recipe = create_recipe(user=self.user)
         recipe = create_recipe(user=self.user)
         recipe.tags.add(tag)
 
